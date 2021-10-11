@@ -1,10 +1,42 @@
 import { Button, TextField } from "@material-ui/core";
+import { useState } from "react";
 
 function DadosEntrega({ onSubmit }) {
+    const [cep, setCep] = useState('');
+    const [address, setAddress] = useState('');
+    const [number, setNumber] = useState('');
+    const [state, setState] = useState('');
+    const [city, setCity] = useState('');
+
     const _submitForm = (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
-        onSubmit({});
+        onSubmit({ cep, address, number, state, city });
+    };
+
+    const _handlerCEP = (ev) => {
+        ev.stopPropagation();
+        setCep(ev.target.value);
+    };
+
+    const _handlerAddress = (ev) => {
+        ev.stopPropagation();
+        setAddress(ev.target.value);
+    };
+
+    const _handlerNumber = (ev) => {
+        ev.stopPropagation();
+        setNumber(ev.target.value);
+    };
+
+    const _handlerState = (ev) => {
+        ev.stopPropagation();
+        setState(ev.target.value);
+    };
+
+    const _handlerCity = (ev) => {
+        ev.stopPropagation();
+        setCity(ev.target.value);
     };
 
     return (
@@ -15,6 +47,8 @@ function DadosEntrega({ onSubmit }) {
                 type="number"
                 variant="outlined"
                 margin="normal"
+                value={cep}
+                onChange={_handlerCEP}
             />
             <TextField
                 id="address"
@@ -23,6 +57,8 @@ function DadosEntrega({ onSubmit }) {
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                value={address}
+                onChange={_handlerAddress}
             />
             <TextField
                 id="number"
@@ -30,6 +66,8 @@ function DadosEntrega({ onSubmit }) {
                 type="number"
                 variant="outlined"
                 margin="normal"
+                value={number}
+                onChange={_handlerNumber}
             />
             <TextField
                 id="state"
@@ -37,6 +75,8 @@ function DadosEntrega({ onSubmit }) {
                 type="text"
                 variant="outlined"
                 margin="normal"
+                value={state}
+                onChange={_handlerState}
             />
             <TextField
                 id="city"
@@ -45,6 +85,8 @@ function DadosEntrega({ onSubmit }) {
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                value={city}
+                onChange={_handlerCity}
             />
 
             <Button
@@ -55,7 +97,7 @@ function DadosEntrega({ onSubmit }) {
             >Finalizar Cadastro
             </Button>
         </form>
-     );
+    );
 }
 
 export default DadosEntrega;

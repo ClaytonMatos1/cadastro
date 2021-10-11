@@ -1,3 +1,5 @@
+import { Step, StepLabel, Stepper, Typography } from "@material-ui/core";
+import { useEffect } from "react";
 import { useState } from "react";
 import DadosEntrega from "./DadosEntrega";
 import DadosPessoais from "./DadosPessoais";
@@ -5,23 +7,43 @@ import DadosUsuario from "./DadosUsuario";
 
 function FormularioCadastro({ onSubmit, validateText, validateDocument }) {
     const [actualStep, setActualStep] = useState(0);
-    const forms = [
-        <DadosUsuario onSubmit={next} />,
-        <DadosPessoais
-        onSubmit={next}
-        validateText={validateText}
-        validateDocument={validateDocument}
-        />,
-        <DadosEntrega
-        onSubmit={onSubmit}
-        />
-    ];
+    const [colletedData, setData] = useState({});
 
-    function next(params) {
+    useEffect(() => {
+        if (actualStep === forms.length - 1) {
+            onSubmit(colletedData);
+        }
+    });
+
+    const dataCollector = (data) => {
+        setData({...colletedData, ...data});
+        next();
+    };
+
+    const next = () => {
         setActualStep(actualStep + 1);
     };
 
-    return <>{ forms[actualStep] }</>;
+    const forms = [
+        <DadosUsuario onSubmit={dataCollector} />,
+        <DadosPessoais
+            onSubmit={dataCollector}
+            validateText={validateText}
+            validateDocument={validateDocument}
+        />,
+        <DadosEntrega onSubmit={dataCollector} />,
+        <Typography variant="h5" align="center">Obrigado pelo Cadastro</Typography>
+    ];
+
+    return <>
+        <Stepper activeStep={actualStep}>
+            <Step><StepLabel>Login</StepLabel></Step>
+            <Step><StepLabel>Pessoal</StepLabel></Step>
+            <Step><StepLabel>Entrega</StepLabel></Step>
+            <Step><StepLabel>Finalização</StepLabel></Step>
+        </Stepper>
+        { forms[actualStep] }
+    </>;
 }
 
 export default FormularioCadastro;

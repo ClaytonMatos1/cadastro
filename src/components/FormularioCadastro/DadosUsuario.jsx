@@ -31,6 +31,7 @@ function DadosUsuario({ onSubmit }) {
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                value={email}
                 onChange={_handlerEmail}
             />
             <TextField
@@ -41,6 +42,7 @@ function DadosUsuario({ onSubmit }) {
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                value={password}
                 onChange={_handlerPassword}
             />
 
