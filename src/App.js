@@ -1,6 +1,9 @@
 import { Container, Typography } from '@material-ui/core';
 import '@fontsource/roboto';
 import './App.css';
+import { validateDocument, validatePassword, validateText } from './models/Cadastro';
+import Validates from './contexts/validates';
+
 import FormularioCadastro from './components/FormularioCadastro/FormularioCadastro';
 
 function App() {
@@ -8,42 +11,14 @@ function App() {
         console.log(data);
     };
 
-    const _validateText = (text) => {
-        if (!text.length) {
-            return {
-                valid: false,
-                text: 'Campo obrigatório'
-            }
-        } else {
-            return {
-                valid: true,
-                text: ''
-            }
-        }
-    };
-
-    const _validateDocument = (num) => {
-        if (num.length !== 11) {
-            return {
-                valid: false,
-                text: 'CPF deve ter 11 dígitos'
-            }
-        } else {
-            return {
-                valid: true,
-                text: ''
-            }
-        }
-    };
-
     return (
         <Container component="article" maxWidth="sm">
             <Typography variant="h3" component="h1" align="center">Formulário de cadastro</Typography>
-            <FormularioCadastro
-                onSubmit={_onSend}
-                validateText={_validateText}
-                validateDocument={_validateDocument}
-            />
+            <Validates.Provider value={{ document: validateDocument, password: validatePassword, text: validateText }}>
+                <FormularioCadastro
+                    onSubmit={_onSend}
+                />
+            </Validates.Provider>
         </Container>
     );
 }

@@ -5,7 +5,7 @@ import DadosEntrega from "./DadosEntrega";
 import DadosPessoais from "./DadosPessoais";
 import DadosUsuario from "./DadosUsuario";
 
-function FormularioCadastro({ onSubmit, validateText, validateDocument }) {
+function FormularioCadastro({ onSubmit }) {
     const [actualStep, setActualStep] = useState(0);
     const [colletedData, setData] = useState({});
 
@@ -16,7 +16,7 @@ function FormularioCadastro({ onSubmit, validateText, validateDocument }) {
     });
 
     const dataCollector = (data) => {
-        setData({...colletedData, ...data});
+        setData({ ...colletedData, ...data });
         next();
     };
 
@@ -25,11 +25,11 @@ function FormularioCadastro({ onSubmit, validateText, validateDocument }) {
     };
 
     const forms = [
-        <DadosUsuario onSubmit={dataCollector} />,
+        <DadosUsuario
+            onSubmit={dataCollector}
+        />,
         <DadosPessoais
             onSubmit={dataCollector}
-            validateText={validateText}
-            validateDocument={validateDocument}
         />,
         <DadosEntrega onSubmit={dataCollector} />,
         <Typography variant="h5" align="center">Obrigado pelo Cadastro</Typography>
@@ -42,7 +42,7 @@ function FormularioCadastro({ onSubmit, validateText, validateDocument }) {
             <Step><StepLabel>Entrega</StepLabel></Step>
             <Step><StepLabel>Finalização</StepLabel></Step>
         </Stepper>
-        { forms[actualStep] }
+        {forms[actualStep]}
     </>;
 }
 

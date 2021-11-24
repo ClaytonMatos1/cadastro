@@ -1,7 +1,8 @@
 import { Button, FormControlLabel, Switch, TextField } from "@material-ui/core";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import Validates from "../../contexts/validates";
 
-function DadosPessoais({onSubmit, validateText, validateDocument}) {
+function DadosPessoais({ onSubmit }) {
     const [name, setName] = useState('');
     const [surName, setSurName] = useState('');
     const [document, setDocument] = useState('');
@@ -22,12 +23,31 @@ function DadosPessoais({onSubmit, validateText, validateDocument}) {
         }
     });
 
+    const validate = useContext(Validates);
     const _isRequiredName = (ev) => {
         ev.stopPropagation();
-        const checkValid = validateText(name);
+        const checkValid = validate.text(name);
         setErrors({
             ...errors,
             name: checkValid
+        });
+    };
+
+    const _isRequiredSurName = (ev) => {
+        ev.stopPropagation();
+        const checkValid = validate.text(surName);
+        setErrors({
+            ...errors,
+            surName: checkValid
+        });
+    };
+
+    const _validateDocument = (ev) => {
+        ev.stopPropagation();
+        const checkValid = validate.document(document);
+        setErrors({
+            ...errors,
+            document: checkValid
         });
     };
 
@@ -36,27 +56,9 @@ function DadosPessoais({onSubmit, validateText, validateDocument}) {
         setName(ev.target.value);
     };
 
-    const _isRequiredSurName = (ev) => {
-        ev.stopPropagation();
-        const checkValid = validateText(surName);
-        setErrors({
-            ...errors,
-            surName: checkValid
-        });
-    };
-
     const _handlerSurname = (ev) => {
         ev.stopPropagation();
         setSurName(ev.target.value);
-    };
-
-    const _validateDocument = (ev) => {
-        ev.stopPropagation();
-        const checkValid = validateDocument(document);
-        setErrors({
-            ...errors,
-            document: checkValid
-        });
     };
 
     const _handlerDocument = (ev) => {
@@ -74,10 +76,19 @@ function DadosPessoais({onSubmit, validateText, validateDocument}) {
         setNewsLetr(ev.target.checked);
     };
 
+    const _isValid = () => {
+        for (let field in errors) {
+            if (!errors[field].valid) {
+                return false;
+            }
+        }
+        return true;
+    };
+
     const _submitForm = (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
-        onSubmit({name, surName, document, promotion, newsLetr});
+        if (_isValid()) onSubmit({ name, surName, document, promotion, newsLetr });
     };
 
     return (
@@ -132,7 +143,7 @@ function DadosPessoais({onSubmit, validateText, validateDocument}) {
                 variant="contained"
                 color="primary"
                 type="submit"
-            >Cadastrar
+            >Próximo
             </Button>
         </form>
     );

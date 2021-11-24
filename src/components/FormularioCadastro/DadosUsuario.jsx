@@ -1,14 +1,27 @@
 import { Button, TextField } from "@material-ui/core";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Validates from "../../contexts/validates";
+import UseErrors from "../../hooks/useErrors";
 
 function DadosUsuario({ onSubmit }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const validate = useContext(Validates);
+    const [errors, validatePassword] = UseErrors(validate);
+
+    const _isValid = () => {
+        for (let field in errors) {
+            if (!errors[field].valid) {
+                return false;
+            }
+        }
+        return true;
+    };
 
     const _submitForm = (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
-        onSubmit({ email, password });
+        if (_isValid()) onSubmit({ email, password });
     };
 
     const _handlerEmail = (ev) => {
@@ -36,6 +49,7 @@ function DadosUsuario({ onSubmit }) {
             />
             <TextField
                 id="password"
+                name="password"
                 label="senha"
                 type="password"
                 required
@@ -43,6 +57,9 @@ function DadosUsuario({ onSubmit }) {
                 margin="normal"
                 fullWidth
                 value={password}
+                onBlur={validatePassword}
+                error={!errors.password.valid}
+                helperText={errors.password.text}
                 onChange={_handlerPassword}
             />
 
@@ -50,7 +67,7 @@ function DadosUsuario({ onSubmit }) {
                 variant="contained"
                 color="primary"
                 type="submit"
-            >Cadastrar
+            >Próximo
             </Button>
         </form>
     );
